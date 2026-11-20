@@ -109,7 +109,7 @@ function filtered(){const q=state.q.trim().toLowerCase(),c=state.cat;
   return R.filter(r=>{const ok=c==="Alle"?true:c==="Favoriten"?(has(r,"Favorit")||rate(r)>=5):c==="Als Nächstes"?isNext(r.id):c==="Saison"?inSeason(r):c==="Bewertet"?rate(r)>0:c==="Noch nie gemacht"?(has(r,"Noch nie gemacht")&&!rate(r)):r.cat===c;
     return ok&&(!q||q.split(/\s+/).every(w=>hayOf(r).includes(w)));});}
 const shopCount=()=>Object.keys(U.shop).filter(id=>R.find(r=>r.id===id)).length;
-const imgTag=(r,cls)=>IMGS.includes(r.id)?`<img class="${cls}" src="img/${r.id}.jpg" alt="" loading="lazy">`:(cls==="th"?`<div class="th ph">${esc(V(r).title[0])}</div>`:"");
+const imgTag=(r,cls)=>IMGS.includes(r.id)?`<img class="${cls}" src="${r.id}.jpg" alt="" loading="lazy">`:(cls==="th"?`<div class="th ph">${esc(V(r).title[0])}</div>`:"");
 function langSwitch(){return `<div class="lang">${[["de","DE"],["en","EN"],["orig",S[UIL()].origLbl]].map(([k,l])=>`<button data-l="${k}" class="${LANG===k?"on":""}">${l}</button>`).join("")}</div>`;}
 function bindLang(redraw){document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{if(LANG!=="orig")store("rez-uil",UIL());LANG=b.dataset.l;store("rez-lang",LANG);redraw();});}
 
@@ -240,7 +240,7 @@ function openShare(r){const t=T();const sh=document.getElementById("sheet");
 }
 function loadImg(src){return new Promise(res=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>res(null);i.src=src;});}
 async function recipeImage(r){const v=V(r),f=factor(r),t=T();const W=1080,P=64,CW=W-2*P;
-  const photo=IMGS.includes(r.id)?await loadImg("img/"+r.id+".jpg"):null;
+  const photo=IMGS.includes(r.id)?await loadImg(r.id+".jpg"):null;
   const c=document.createElement("canvas"),x=c.getContext("2d");
   const serif='"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif',sans='system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
   function wrap(text,font,maxW){x.font=font;const words=String(text).split(" ");const lines=[];let cur="";for(const w of words){const test=cur?cur+" "+w:w;if(x.measureText(test).width>maxW&&cur){lines.push(cur);cur=w;}else cur=test;}if(cur)lines.push(cur);return lines;}
